@@ -1,32 +1,32 @@
-package admin
+package adminV1Controller
 
 import (
 	"SMT/config"
 	"SMT/models"
 	adminServices "SMT/services/admin"
-	"SMT/types/requests"
-	"SMT/types/strings"
+	requestTypes "SMT/types/requests"
+	responseMessages "SMT/types/responses"
 	"SMT/utility"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Auth(c *gin.Context) {
-	var requestBody requests.AdminAuth
+	var requestBody requestTypes.AdminAuth
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
-		adminServices.SendErrorResponse(c, strings.ADMIN_AUTH_INVALID_JSON_INPUT)
+		adminServices.SendErrorResponse(c, responseMessages.ADMIN_AUTH_INVALID_JSON_INPUT)
 		return
 	}
 
 	var admin models.Admin
 	getAdminResult := config.DB.First(&admin, "adminId = ?", requestBody.AdminId)
 	if getAdminResult.RowsAffected == 0 {
-		adminServices.SendErrorResponse(c, strings.INVALID_ADMINID)
+		adminServices.SendErrorResponse(c, responseMessages.INVALID_ADMINID)
 		return
 	}
 	if !utility.ValidatePassword(requestBody.Password, admin.Password) {
-		adminServices.SendErrorResponse(c, strings.INVALID_PASSWORD)
+		adminServices.SendErrorResponse(c, responseMessages.INVALID_PASSWORD)
 		return
 	}
 
@@ -36,7 +36,7 @@ func Auth(c *gin.Context) {
 		"email":   admin.EmailId,
 	})
 	if err != nil {
-		adminServices.SendErrorResponse(c, strings.LOGIN_FAILED)
+		adminServices.SendErrorResponse(c, responseMessages.LOGIN_FAILED)
 		return
 	}
 
@@ -44,10 +44,10 @@ func Auth(c *gin.Context) {
 }
 
 func ChangePassword(c *gin.Context) {
-	var requestBody requests.AdminChangePassword
+	var requestBody requestTypes.AdminChangePassword
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
-		adminServices.SendErrorResponse(c, strings.ADMIN_CHANGE_PASSWORD_JSON_INPUT)
+		adminServices.SendErrorResponse(c, responseMessages.INVALID_ADMIN_CHANGE_PASSWORD_JSON_INPUT)
 		return
 	}
 	jwtPayload, _ := c.Get("user")
@@ -55,10 +55,10 @@ func ChangePassword(c *gin.Context) {
 	var admin models.Admin
 	config.DB.First(&admin, "adminId = ?", adminId)
 	if !utility.ValidatePassword(requestBody.OldPassword, admin.Password) {
-		adminServices.SendErrorResponse(c, strings.INVALID_PASSWORD)
+		adminServices.SendErrorResponse(c, responseMessages.INVALID_PASSWORD)
 		return
 	}
 	admin.Password = utility.GetEncryptedPassword(requestBody.NewPassword)
 	config.DB.Save(&admin)
-	adminServices.SendSuccessResponseWithoutBody(c, strings.PASSWORD_CHANGED)
+	adminServices.SendSuccessResponseWithoutBody(c, responseMessages.PASSWORD_CHANGED)
 }

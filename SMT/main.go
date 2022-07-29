@@ -5,6 +5,7 @@ import (
 	"SMT/models"
 	"SMT/routes"
 	"SMT/seeders"
+	"SMT/validations"
 	"log"
 	"os"
 
@@ -18,11 +19,14 @@ func main() {
 		log.Fatal(".env not found")
 	}
 
-	// DB connection
+	// connecting to DB
 	config.InitDBConfig(os.Getenv("DB_CONNECTION_STRING"))
 
 	// syncing models
 	models.SyncModels()
+
+	// registering validations
+	validations.RegisterValidations()
 
 	// seeding minimum required data in DB
 	seeders.SeedFirstAdmin()

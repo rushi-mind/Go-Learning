@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"SMT/controllers/api/v1/admin"
+	adminV1Controller "SMT/controllers/api/v1/admin"
 	"SMT/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -13,26 +13,26 @@ func InitAdminRoutes(router *gin.Engine) {
 	adminRoutesGroup.Use(middlewares.AuthMiddleware)
 
 	// students
-	adminRoutesGroup.POST("/student", admin.AddStudent)
-	adminRoutesGroup.PUT("/student/:rollNo", admin.UpdateStudent)
-	adminRoutesGroup.GET("/students", admin.GetAllStudents)
-	adminRoutesGroup.GET("/student/:id", admin.GetStudent)
-	adminRoutesGroup.DELETE("/student/:rollNo", admin.DeleteStudent)
+	adminRoutesGroup.POST("/student", adminV1Controller.AddStudent)
+	adminRoutesGroup.PUT("/student/:rollNo", adminV1Controller.UpdateStudent)
+	adminRoutesGroup.GET("/students", adminV1Controller.GetAllStudents)
+	adminRoutesGroup.GET("/student/:id", adminV1Controller.GetStudent)
+	adminRoutesGroup.DELETE("/student/:rollNo", adminV1Controller.DeleteStudent)
 
 	// faculties
-	adminRoutesGroup.POST("/teacher", admin.AddTeacher)
-	adminRoutesGroup.PUT("/teacher/:empId", admin.UpdateTeacher)
-	adminRoutesGroup.GET("/teachers", admin.GetAllTeachers)
-	adminRoutesGroup.GET("/teacher/:empId", admin.GetTeacher)
-	adminRoutesGroup.DELETE("/teacher/:empId", admin.DeleteTeacher)
+	adminRoutesGroup.POST("/teacher", adminV1Controller.AddTeacher)
+	adminRoutesGroup.PUT("/teacher/:empId", adminV1Controller.UpdateTeacher)
+	adminRoutesGroup.GET("/teachers", adminV1Controller.GetAllTeachers)
+	adminRoutesGroup.GET("/teacher/:empId", adminV1Controller.GetTeacher)
+	adminRoutesGroup.DELETE("/teacher/:empId", adminV1Controller.DeleteTeacher)
 
 	// departments
-	adminRoutesGroup.POST("/department", admin.AddDepartment)
-	adminRoutesGroup.PUT("/department/:id", admin.UpdateDepartment)
-	adminRoutesGroup.DELETE("/department/:id", admin.DeleteDepartment)
+	adminRoutesGroup.POST("/department", adminV1Controller.AddDepartment)
+	adminRoutesGroup.PUT("/department/:id", adminV1Controller.UpdateDepartment)
+	adminRoutesGroup.DELETE("/department/:id", adminV1Controller.DeleteDepartment)
 
 	// auth
-	router.POST("/auth", admin.Auth)
-	adminRoutesGroup.PUT("/change-password", admin.ChangePassword)
+	router.POST("/auth", adminV1Controller.Auth)
+	adminRoutesGroup.PUT("/change-password", adminV1Controller.ChangePassword)
 
 }

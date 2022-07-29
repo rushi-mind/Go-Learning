@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"SMT/types/strings"
+	responseTypes "SMT/types/responses"
 	"errors"
 	"os"
 
@@ -28,7 +28,7 @@ func CreateJWT(payload map[string]interface{}) (string, error) {
 func GetPayloadFromToken(jwtToken string) (map[string]interface{}, error) {
 	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New(strings.INVALID_JWT_TOKEN)
+			return nil, errors.New(responseTypes.INVALID_JWT_TOKEN)
 		}
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
@@ -41,5 +41,5 @@ func GetPayloadFromToken(jwtToken string) (map[string]interface{}, error) {
 	if ok && token.Valid {
 		return claims, nil
 	}
-	return nil, errors.New(strings.INVALID_JWT_TOKEN)
+	return nil, errors.New(responseTypes.INVALID_JWT_TOKEN)
 }

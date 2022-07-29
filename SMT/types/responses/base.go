@@ -1,4 +1,4 @@
-package responses
+package responseTypes
 
 type Base struct {
 	Status  int    `json:"status"`

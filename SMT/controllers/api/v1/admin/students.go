@@ -1,4 +1,4 @@
-package admin
+package adminV1Controller
 
 import "github.com/gin-gonic/gin"
 

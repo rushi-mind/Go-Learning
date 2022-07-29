@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	adminServices "SMT/services/admin"
-	messageStrings "SMT/types/strings"
+	messageStrings "SMT/types/responses"
 	"SMT/utility"
 	"strings"
 
@@ -11,9 +11,10 @@ import (
 
 func AuthMiddleware(c *gin.Context) {
 	token := c.GetHeader("Authorization")
-	if token == "" {
-		c.String(401, "token not entered")
+	if token == "" || len(token) == 0 {
+		c.String(401, "token not found")
 		c.Abort()
+		return
 	}
 	payload, err := utility.GetPayloadFromToken(strings.Split(token, " ")[1])
 	if err != nil || payload["adminId"] == "" {

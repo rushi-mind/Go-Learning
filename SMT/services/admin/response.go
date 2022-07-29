@@ -1,16 +1,15 @@
-package admin
+package adminServices
 
 import (
-	"SMT/types/responses"
-	"SMT/types/strings"
+	responseTypes "SMT/types/responses"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SendErrorResponse(c *gin.Context, message string) {
-	response := responses.AuthError{
-		Base: responses.Base{
+	response := responseTypes.AuthError{
+		Base: responseTypes.Base{
 			Status:  0,
 			Message: message,
 		},
@@ -18,21 +17,28 @@ func SendErrorResponse(c *gin.Context, message string) {
 	c.JSON(http.StatusBadRequest, response)
 }
 
+func SuccessResponseWithData(c *gin.Context, message string, data any) {
+	c.JSON(http.StatusOK, responseTypes.SuccessResponseData{
+		Base: responseTypes.Base{Status: 1, Message: message},
+		Data: data,
+	})
+}
+
 func SendLoginSuccessResponse(c *gin.Context, token string) {
-	c.JSON(http.StatusOK, responses.AdminAuthSuccess{
-		Base: responses.Base{
+	c.JSON(http.StatusOK, responseTypes.AdminAuthSuccess{
+		Base: responseTypes.Base{
 			Status:  1,
-			Message: strings.SUCCESS_LOGIN,
+			Message: responseTypes.SUCCESS_LOGIN,
 		},
-		Data: responses.TokenResponse{
+		Data: responseTypes.TokenResponse{
 			Token: token,
 		},
 	})
 }
 
 func SendSuccessResponseWithoutBody(c *gin.Context, message string) {
-	c.JSON(http.StatusOK, responses.SuccessResponse{
-		Base: responses.Base{
+	c.JSON(http.StatusOK, responseTypes.SuccessResponse{
+		Base: responseTypes.Base{
 			Status:  1,
 			Message: message,
 		},
