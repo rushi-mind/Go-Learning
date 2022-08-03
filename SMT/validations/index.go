@@ -9,5 +9,8 @@ import (
 
 func RegisterValidations() {
 	v, _ := binding.Validator.Engine().(*validator.Validate)
-	v.RegisterValidation(types.DEPARTMENT_CODE_VALIDATION, DepartmentCodeValidation, true)
+
+	v.RegisterValidation(types.DEPARTMENT_CODE_VALIDATION, DepartmentCodeValidation)
+	v.RegisterValidation(types.NAME_VALIDATION, NameValidation)
+	v.RegisterValidation(types.SEMESTER_VALIDATION, SemesterValidation)
 }
