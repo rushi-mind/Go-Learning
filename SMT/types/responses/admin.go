@@ -38,4 +38,5 @@ const (
 	TEACHER_DELETED         = "Teacher deleted successfully"
 	TEACHER_CREATE_ERROR    = "Failed to create new teacher"
 	TEACHER_CREATED         = "Teacher created successfully"
+	INVALID_INPUT_JSON      = "Invalid input JSON"
 )

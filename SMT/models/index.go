@@ -6,8 +6,8 @@ import (
 
 func SyncModels() {
 	var DB = config.DB
-	_ = DB.AutoMigrate(&Admin{})
-	_ = DB.AutoMigrate(&Department{})
-	_ = DB.AutoMigrate(&Student{})
-	// DB.AutoMigrate((&Faculty{}))
+	DB.AutoMigrate(&Admin{})
+	DB.AutoMigrate(&Department{})
+	DB.AutoMigrate(&Student{})
+	DB.AutoMigrate((&Faculty{}))
 }

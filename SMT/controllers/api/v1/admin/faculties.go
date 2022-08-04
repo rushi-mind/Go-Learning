@@ -6,6 +6,7 @@ import (
 	requestTypes "SMT/types/requests"
 	responseTypes "SMT/types/responses"
 	"SMT/utility"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,11 @@ func GetTeacher(c *gin.Context) {
 
 func AddTeacher(c *gin.Context) {
 	var requestBody requestTypes.AddNewTeacher
+	if c.Request.Body == nil {
+		fmt.Println("invalid here")
+		utility.ErrorResponse(c, responseTypes.INVALID_INPUT_JSON)
+		return
+	}
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		utility.ErrorResponse(c, utility.GetErrorMessage(err))
@@ -43,6 +49,11 @@ func AddTeacher(c *gin.Context) {
 	teacher.FirstName = requestBody.FirstName
 	teacher.LastName = requestBody.LastName
 	teacher.DepartmentId = requestBody.DepartmentId
+	teacher.EmployeeId = utility.CreateEmployeeId(teacher.DepartmentId)
+	if teacher.EmployeeId == "" {
+		utility.ErrorResponse(c, responseTypes.INVALID_DEPARTMENT_ID)
+		return
+	}
 	insertResult := config.DB.Create(&teacher)
 	if insertResult.Error != nil {
 		utility.ErrorResponse(c, responseTypes.TEACHER_CREATE_ERROR)
