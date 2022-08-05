@@ -3,8 +3,9 @@ package adminV1Controller
 import (
 	"SMT/config"
 	"SMT/models"
+	"SMT/repository"
 	requestTypes "SMT/types/requests"
-	responseTypes "SMT/types/responses"
+	stringTypes "SMT/types/strings"
 	"SMT/utility"
 	"strconv"
 
@@ -13,8 +14,7 @@ import (
 
 func AddDepartment(c *gin.Context) {
 	var requestBody requestTypes.AddNewDepartment
-	err := c.ShouldBindJSON(&requestBody)
-	if err != nil {
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		utility.ErrorResponse(c, utility.GetErrorMessage(err))
 		return
 	}
@@ -22,44 +22,47 @@ func AddDepartment(c *gin.Context) {
 	department.Code = requestBody.Code
 	department.Name = requestBody.Name
 	department.Slug = utility.CreateSlug(department.Name)
-	config.DB.Create(&department)
-	utility.SuccessResponseWithData(c, responseTypes.DEPARTMENT_ADDED, department)
+	if err := repository.AddDepartment(department); err != nil {
+		utility.ErrorResponse(c, stringTypes.DEPARTMENT_INSERT_FAIL)
+		return
+	}
+	utility.SuccessResponseWithoutData(c, stringTypes.DEPARTMENT_ADDED)
 }
 
 func UpdateDepartment(c *gin.Context) {
 	var requestBody requestTypes.UpdateDepartment
-	err := c.ShouldBindJSON(&requestBody)
-	if err != nil {
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		utility.ErrorResponse(c, utility.GetErrorMessage(err))
 		return
 	}
 	id, err := strconv.Atoi(c.Param("deptId"))
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.INVALID_DEPARTMENT_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
 		return
 	}
-	var count int64
-	config.DB.Model(&models.Department{}).Where("id = ?", id).Count(&count)
-	if count == 0 {
-		utility.ErrorResponse(c, responseTypes.DEPARTMENT_NOT_FOUND)
+	if !repository.IsValidDepartmentID(id) {
+		utility.ErrorResponse(c, stringTypes.DEPARTMENT_NOT_FOUND)
 		return
 	}
-	config.DB.Model(&models.Department{}).Updates(requestBody)
-	utility.SuccessResponseWithoutData(c, responseTypes.DEPARTMENT_UPDATED)
+	if err := repository.UpdateDepartment(requestBody, id); err != nil {
+		utility.ErrorResponse(c, stringTypes.DEPARTMENT_UPDATE_FAIL)
+		return
+	}
+	utility.SuccessResponseWithoutData(c, stringTypes.DEPARTMENT_UPDATED)
 }
 
 func DeleteDepartment(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("deptId"))
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.INVALID_DEPARTMENT_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
 		return
 	}
 	var department models.Department
 	config.DB.First(&department, id)
 	if department.Id == 0 {
-		utility.ErrorResponse(c, responseTypes.DEPARTMENT_NOT_FOUND)
+		utility.ErrorResponse(c, stringTypes.DEPARTMENT_NOT_FOUND)
 		return
 	}
 	config.DB.Delete(&department)
-	utility.SuccessResponseWithoutData(c, responseTypes.DEPARTMENT_DELETED)
+	utility.SuccessResponseWithoutData(c, stringTypes.DEPARTMENT_DELETED)
 }

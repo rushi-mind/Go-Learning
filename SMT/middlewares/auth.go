@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	messageStrings "SMT/types/responses"
+	stringTypes "SMT/types/strings"
 	"SMT/utility"
 	"strings"
 
@@ -17,7 +17,9 @@ func AuthMiddleware(c *gin.Context) {
 	}
 	payload, err := utility.GetPayloadFromToken(strings.Split(token, " ")[1])
 	if err != nil || payload["adminId"] == "" {
-		utility.ErrorResponse(c, messageStrings.AUTHENTICATION_FAILED)
+		utility.ErrorResponse(c, stringTypes.AUTHENTICATION_FAILED)
+
+		return
 	}
 	c.Set("user", payload)
 	c.Next()

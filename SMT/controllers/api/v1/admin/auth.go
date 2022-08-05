@@ -5,6 +5,7 @@ import (
 	"SMT/models"
 	requestTypes "SMT/types/requests"
 	responseTypes "SMT/types/responses"
+	stringTypes "SMT/types/strings"
 	"SMT/utility"
 
 	"github.com/gin-gonic/gin"
@@ -21,11 +22,11 @@ func Auth(c *gin.Context) {
 	var admin models.Admin
 	getAdminResult := config.DB.First(&admin, "admin_id = ?", requestBody.AdminId)
 	if getAdminResult.RowsAffected == 0 {
-		utility.ErrorResponse(c, responseTypes.INVALID_ADMINID)
+		utility.ErrorResponse(c, stringTypes.INVALID_ADMINID)
 		return
 	}
 	if !utility.ValidatePassword(requestBody.Password, admin.Password) {
-		utility.ErrorResponse(c, responseTypes.INVALID_PASSWORD)
+		utility.ErrorResponse(c, stringTypes.INVALID_PASSWORD)
 		return
 	}
 
@@ -35,11 +36,11 @@ func Auth(c *gin.Context) {
 		"email":    admin.EmailId,
 	})
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.LOGIN_FAILED)
+		utility.ErrorResponse(c, stringTypes.LOGIN_FAILED)
 		return
 	}
 
-	utility.SuccessResponseWithData(c, responseTypes.SUCCESS_LOGIN, responseTypes.TokenResponse{Token: token})
+	utility.SuccessResponseWithData(c, stringTypes.SUCCESS_LOGIN, responseTypes.TokenResponse{Token: token})
 }
 
 func ChangePassword(c *gin.Context) {
@@ -54,10 +55,10 @@ func ChangePassword(c *gin.Context) {
 	var admin models.Admin
 	config.DB.First(&admin, "admin_id = ?", adminId)
 	if !utility.ValidatePassword(requestBody.OldPassword, admin.Password) {
-		utility.ErrorResponse(c, responseTypes.INVALID_PASSWORD)
+		utility.ErrorResponse(c, stringTypes.INVALID_PASSWORD)
 		return
 	}
 	admin.Password = utility.GetEncryptedPassword(requestBody.NewPassword)
 	config.DB.Save(&admin)
-	utility.SuccessResponseWithoutData(c, responseTypes.PASSWORD_CHANGED)
+	utility.SuccessResponseWithoutData(c, stringTypes.PASSWORD_CHANGED)
 }

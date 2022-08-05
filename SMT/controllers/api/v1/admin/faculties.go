@@ -4,7 +4,7 @@ import (
 	"SMT/config"
 	"SMT/models"
 	requestTypes "SMT/types/requests"
-	responseTypes "SMT/types/responses"
+	stringTypes "SMT/types/strings"
 	"SMT/utility"
 	"fmt"
 	"strconv"
@@ -15,29 +15,29 @@ import (
 func GetAllTeachers(c *gin.Context) {
 	var teachers []models.Faculty
 	config.DB.Find(&teachers)
-	utility.SuccessResponseWithData(c, responseTypes.TEACHERS_FETCHED, teachers)
+	utility.SuccessResponseWithData(c, stringTypes.TEACHERS_FETCHED, teachers)
 }
 
 func GetTeacher(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
 	var teacher models.Faculty
 	config.DB.First(&teacher, id)
 	if teacher.Id == 0 {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
-	utility.SuccessResponseWithData(c, responseTypes.TEACHER_FETCHED, teacher)
+	utility.SuccessResponseWithData(c, stringTypes.TEACHER_FETCHED, teacher)
 }
 
 func AddTeacher(c *gin.Context) {
 	var requestBody requestTypes.AddNewTeacher
 	if c.Request.Body == nil {
 		fmt.Println("invalid here")
-		utility.ErrorResponse(c, responseTypes.INVALID_INPUT_JSON)
+		utility.ErrorResponse(c, stringTypes.INVALID_INPUT_JSON)
 		return
 	}
 	err := c.ShouldBindJSON(&requestBody)
@@ -51,15 +51,15 @@ func AddTeacher(c *gin.Context) {
 	teacher.DepartmentId = requestBody.DepartmentId
 	teacher.EmployeeId = utility.CreateEmployeeId(teacher.DepartmentId)
 	if teacher.EmployeeId == "" {
-		utility.ErrorResponse(c, responseTypes.INVALID_DEPARTMENT_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
 		return
 	}
 	insertResult := config.DB.Create(&teacher)
 	if insertResult.Error != nil {
-		utility.ErrorResponse(c, responseTypes.TEACHER_CREATE_ERROR)
+		utility.ErrorResponse(c, stringTypes.TEACHER_CREATE_ERROR)
 		return
 	}
-	utility.SuccessResponseWithData(c, responseTypes.TEACHER_CREATED, teacher)
+	utility.SuccessResponseWithData(c, stringTypes.TEACHER_CREATED, teacher)
 }
 
 func UpdateTeacher(c *gin.Context) {
@@ -71,31 +71,31 @@ func UpdateTeacher(c *gin.Context) {
 	}
 	teacherId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
 	var count int64
 	config.DB.Model(&models.Faculty{}).Where("id = ?", teacherId).Count(&count)
 	if count == 0 {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
 	config.DB.Model(&models.Faculty{}).Updates(requestBody)
-	utility.SuccessResponseWithoutData(c, responseTypes.TEACHER_UPDATE)
+	utility.SuccessResponseWithoutData(c, stringTypes.TEACHER_UPDATE)
 }
 
 func DeleteTeacher(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
 	var count int64
 	config.DB.Model(&models.Faculty{}).Where("id = ?", id).Count(&count)
 	if count == 0 {
-		utility.ErrorResponse(c, responseTypes.INVALID_TEACHER_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
 	config.DB.Delete(&models.Faculty{}).Where("id = ?", id)
-	utility.SuccessResponseWithoutData(c, responseTypes.TEACHER_DELETED)
+	utility.SuccessResponseWithoutData(c, stringTypes.TEACHER_DELETED)
 }

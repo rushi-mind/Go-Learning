@@ -1,7 +1,7 @@
 package utility
 
 import (
-	responseTypes "SMT/types/responses"
+	responseMessages "SMT/types/strings"
 	"log"
 
 	"golang.org/x/crypto/bcrypt"
@@ -10,7 +10,7 @@ import (
 func GetEncryptedPassword(password string) string {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), 9)
 	if err != nil {
-		log.Fatal(responseTypes.PASSWORD_HASHING_FAILED)
+		log.Fatal(responseMessages.PASSWORD_HASHING_FAILED)
 	}
 	return string(hashed)
 }
