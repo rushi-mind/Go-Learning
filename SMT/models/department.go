@@ -7,3 +7,7 @@ type Department struct {
 	Slug     string    `gorm:"type:varchar(30);column:slug" json:"-"`
 	Students []Student `gorm:"DepartmentId" json:"-"`
 }
+
+func (Department) TableName() string {
+	return "departments"
+}

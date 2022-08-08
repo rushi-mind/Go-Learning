@@ -13,8 +13,8 @@ func SeedFirstAdmin() {
 	DB.First(&admin)
 	if admin.Id == 0 {
 		admin.Id = 1
-		admin.AdminId = "101425"
-		admin.EmailId = "admin@gmail.com"
+		admin.AdminId = os.Getenv("DEFAULT_ADMIN_ID")
+		admin.EmailId = os.Getenv("DEFAULT_ADMIN_EMAIL")
 		admin.Password = utility.GetEncryptedPassword(os.Getenv("DEFAULT_ADMIN_PASSWORD"))
 		DB.Create(&admin)
 	}

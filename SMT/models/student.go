@@ -13,3 +13,7 @@ type Student struct {
 	Address      string     `gorm:"column:address;default:null" json:"address,omitempty"`
 	ProfileImage string     `gorm:"column:profile_image;default:null" json:"profile_image,omitempty"`
 }
+
+func (Student) TableName() string {
+	return "students"
+}

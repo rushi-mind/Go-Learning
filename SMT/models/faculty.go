@@ -10,3 +10,7 @@ type Faculty struct {
 	DepartmentId uint       `gorm:"column:department_id;type:uint" json:"department_id"`
 	Department   Department `gorm:"foreignKey:DepartmentId" json:"-"`
 }
+
+func (Faculty) TableName() string {
+	return "faculties"
+}

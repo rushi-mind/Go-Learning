@@ -31,6 +31,9 @@ func InitAdminRoutes(router *gin.Engine) {
 	adminRoutes.PUT("/department/:deptId", adminV1Controller.UpdateDepartment)
 	adminRoutes.DELETE("/department/:deptId", adminV1Controller.DeleteDepartment)
 
+	// attendance
+	adminRoutes.POST("/attendance", adminV1Controller.AddAttendance)
+
 	// auth
 	router.POST("/admin/auth", adminV1Controller.Auth)
 	adminRoutes.PUT("/change-password", adminV1Controller.ChangePassword)

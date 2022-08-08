@@ -9,5 +9,8 @@ func SyncModels() {
 	DB.AutoMigrate(&Admin{})
 	DB.AutoMigrate(&Department{})
 	DB.AutoMigrate(&Student{})
-	DB.AutoMigrate((&Faculty{}))
+	DB.AutoMigrate(&Faculty{})
+	DB.AutoMigrate(&Attendace{})
+	DB.AutoMigrate(&Assignment{})
+	DB.AutoMigrate(&LeaveApplication{})
 }
