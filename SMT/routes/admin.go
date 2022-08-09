@@ -12,6 +12,8 @@ func InitAdminRoutes(router *gin.Engine) {
 	adminRoutes := router.Group("/api/v1")
 	adminRoutes.Use(middlewares.AuthMiddleware)
 
+	router.MaxMultipartMemory = 8 << 20
+
 	// students
 	adminRoutes.POST("/student", adminV1Controller.AddStudent)
 	adminRoutes.PUT("/student/:id", adminV1Controller.UpdateStudent)
@@ -33,6 +35,11 @@ func InitAdminRoutes(router *gin.Engine) {
 
 	// attendance
 	adminRoutes.POST("/attendance", adminV1Controller.AddAttendance)
+
+	// assignments
+	adminRoutes.POST("/assignment", adminV1Controller.AddAssignment)
+	adminRoutes.DELETE("/assignment/:id", adminV1Controller.DeleteAssignment)
+	adminRoutes.GET("/assignments", adminV1Controller.GetAssignments)
 
 	// auth
 	router.POST("/admin/auth", adminV1Controller.Auth)

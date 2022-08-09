@@ -12,4 +12,5 @@ func RegisterValidations() {
 
 	v.RegisterValidation(stringTypes.DEPARTMENT_CODE_VALIDATION, DepartmentCodeValidation)
 	v.RegisterValidation(stringTypes.SEMESTER_VALIDATION, SemesterValidation)
+	v.RegisterValidation(stringTypes.DATE_VALIDATION, _DateValidation)
 }

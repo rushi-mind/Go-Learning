@@ -1,8 +1,8 @@
 package adminV1Controller
 
 import (
-	"SMT/models"
 	"SMT/repository"
+	requestTypes "SMT/types/requests"
 	stringTypes "SMT/types/strings"
 	"SMT/utility"
 	"log"
@@ -11,7 +11,7 @@ import (
 )
 
 func AddAttendance(c *gin.Context) {
-	var requestBody []models.Attendace
+	var requestBody []requestTypes.AttendanceInput
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		log.Default().Println(err)
