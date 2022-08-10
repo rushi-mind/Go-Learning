@@ -13,3 +13,8 @@ type UpdateStudent struct {
 	LastName  string `json:"last_name" binding:"omitempty,alpha"`
 	Address   string `json:"address"`
 }
+
+type AuthStudent struct {
+	RollNo   string `json:"roll_no" binding:"numeric,required"`
+	Password string `json:"password" binding:"required"`
+}

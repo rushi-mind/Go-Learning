@@ -48,3 +48,31 @@ func UpdateStudent(requestBody requestTypes.UpdateStudent, id int) error {
 func DeleteStudent(id int) {
 	config.DB.Exec("DELETE FROM students WHERE id = ?", id)
 }
+
+func GetStudentsListOfClass(deptID, semester string) []responseTypes.StudentResponse {
+	var students []responseTypes.StudentResponse
+	config.DB.Raw("SELECT s.id, roll_no, first_name, last_name, email, semester, address, profile_image, department_id, d.code as department_code, d.name as department_name FROM students s LEFT JOIN departments d ON department_id = d.id WHERE s.department_id = ? AND s.semester = ?", deptID, semester).Scan(&students)
+	return students
+}
+
+func GetStudentByRollNo(rollNo string) responseTypes.StudentResponse {
+	var student responseTypes.StudentResponse
+	config.DB.Raw("SELECT s.id, roll_no, first_name, last_name, email, semester, address, profile_image, department_id, d.code as department_code, d.name as department_name FROM students s LEFT JOIN departments d ON department_id = d.id WHERE roll_no = ?", rollNo).Scan(&student)
+	return student
+}
+
+func GetPasswordFromDB(studentID uint) string {
+	var password string
+	config.DB.Raw("SELECT password FROM students WHERE id = ?", studentID).Scan(&password)
+	return password
+}
+
+func IsValidRollNo(rollNo string) (uint, bool) {
+	var id uint
+	config.DB.Raw("SELECT id from students WHERE roll_no = ?", rollNo).Scan(&id)
+	return id, id != 0
+}
+
+func UpdateStudentPassword(studentID uint, newPassword string) bool {
+	return config.DB.Exec("UPDATE students SET password = ? WHERE id = ?", newPassword, studentID).RowsAffected > 0
+}

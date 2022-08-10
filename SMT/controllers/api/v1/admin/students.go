@@ -7,15 +7,31 @@ import (
 	requestTypes "SMT/types/requests"
 	stringTypes "SMT/types/strings"
 	"SMT/utility"
+	"SMT/validations"
 	"log"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllStudents(c *gin.Context) {
+func GetStudents(c *gin.Context) {
+	deptID := c.Query("department-id")
+	semester := c.Query("semester")
+	if deptID != "" && semester != "" {
+		if temp, err := strconv.Atoi(deptID); err != nil || !repository.IsValidDepartmentID(temp) {
+			utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
+			return
+		}
+		if !validations.IsValidSemester(semester) {
+			utility.ErrorResponse(c, stringTypes.INVALID_SEMESTER)
+			return
+		}
+		students := repository.GetStudentsListOfClass(deptID, semester)
+		utility.SuccessResponseWithData(c, stringTypes.STUDENTS_FETCHED, students, len(students))
+		return
+	}
 	students := repository.GetAllStudents()
-	utility.SuccessResponseWithData(c, stringTypes.STUDENTS_FETCHED, students)
+	utility.SuccessResponseWithData(c, stringTypes.STUDENTS_FETCHED, students, len(students))
 }
 
 func GetStudent(c *gin.Context) {
@@ -26,7 +42,7 @@ func GetStudent(c *gin.Context) {
 		utility.ErrorResponse(c, stringTypes.INVALID_STUDENT_ID)
 		return
 	}
-	utility.SuccessResponseWithData(c, stringTypes.STUDENT_FETCHED, student)
+	utility.SuccessResponseWithData(c, stringTypes.STUDENT_FETCHED, student, 1)
 }
 
 func AddStudent(c *gin.Context) {
@@ -34,6 +50,10 @@ func AddStudent(c *gin.Context) {
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		utility.ErrorResponse(c, utility.GetErrorMessage(err))
+		return
+	}
+	if !repository.IsValidDepartmentID(int(requestBody.DepartmentId)) {
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
 		return
 	}
 	var student models.Student

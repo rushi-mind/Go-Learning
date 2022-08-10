@@ -10,14 +10,14 @@ import (
 func InitAdminRoutes(router *gin.Engine) {
 
 	adminRoutes := router.Group("/api/v1")
-	adminRoutes.Use(middlewares.AuthMiddleware)
+	adminRoutes.Use(middlewares.AuthMiddlewareAdmin)
 
 	router.MaxMultipartMemory = 8 << 20
 
 	// students
 	adminRoutes.POST("/student", adminV1Controller.AddStudent)
 	adminRoutes.PUT("/student/:id", adminV1Controller.UpdateStudent)
-	adminRoutes.GET("/students", adminV1Controller.GetAllStudents)
+	adminRoutes.GET("/students", adminV1Controller.GetStudents)
 	adminRoutes.GET("/student/:id", adminV1Controller.GetStudent)
 	adminRoutes.DELETE("/student/:id", adminV1Controller.DeleteStudent)
 

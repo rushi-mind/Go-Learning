@@ -5,9 +5,14 @@ type Base struct {
 	Message string `json:"message"`
 }
 
-type SuccessResponseData struct {
+type Meta struct {
+	Count int `json:"count"`
 	Base
-	Data any `json:"data"`
+}
+
+type SuccessResponseData struct {
+	Meta Meta `json:"meta"`
+	Data any  `json:"data"`
 }
 
 type TokenResponse struct {

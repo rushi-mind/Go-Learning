@@ -3,6 +3,7 @@ package strings
 const (
 	INVALID_JWT_TOKEN        = "invalid JWT token"
 	AUTHENTICATION_FAILED    = "Authenticaion failed"
+	AUTHORIZATION_FAILED     = "Authorization failed"
 	FAILED_TO_HASH           = "failed to hash password"
 	SUCCESS_LOGIN            = "Logged in successfully"
 	LOGIN_FAILED             = "Login failed"
@@ -45,4 +46,7 @@ const (
 	INVALID_SEMESTER         = "Semester is invalid"
 	ASSIGNMENTS_NOT_FOUND    = "Assignments not found"
 	ASSIGNMENTS_FETCHED      = "Assignments fetched successfully"
+	INVALID_ROLL_NO          = "Roll No is invalid"
+	PASSWORD_CHANGE_FAILURE  = "Failed to change password. Please try again."
+	PROFILE_FETCHED          = "Profile fetched successfully"
 )

@@ -15,7 +15,7 @@ import (
 func GetAllTeachers(c *gin.Context) {
 	var teachers []models.Faculty
 	config.DB.Find(&teachers)
-	utility.SuccessResponseWithData(c, stringTypes.TEACHERS_FETCHED, teachers)
+	utility.SuccessResponseWithData(c, stringTypes.TEACHERS_FETCHED, teachers, len(teachers))
 }
 
 func GetTeacher(c *gin.Context) {
@@ -30,7 +30,7 @@ func GetTeacher(c *gin.Context) {
 		utility.ErrorResponse(c, stringTypes.INVALID_TEACHER_ID)
 		return
 	}
-	utility.SuccessResponseWithData(c, stringTypes.TEACHER_FETCHED, teacher)
+	utility.SuccessResponseWithData(c, stringTypes.TEACHER_FETCHED, teacher, 1)
 }
 
 func AddTeacher(c *gin.Context) {
@@ -59,7 +59,7 @@ func AddTeacher(c *gin.Context) {
 		utility.ErrorResponse(c, stringTypes.TEACHER_CREATE_ERROR)
 		return
 	}
-	utility.SuccessResponseWithData(c, stringTypes.TEACHER_CREATED, teacher)
+	utility.SuccessResponseWithoutData(c, stringTypes.TEACHER_CREATED)
 }
 
 func UpdateTeacher(c *gin.Context) {

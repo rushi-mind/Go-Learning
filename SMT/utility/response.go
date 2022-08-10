@@ -14,9 +14,15 @@ func ErrorResponse(c *gin.Context, message string) {
 	})
 }
 
-func SuccessResponseWithData(c *gin.Context, message string, data any) {
+func SuccessResponseWithToken(c *gin.Context, token string) {
+	c.JSON(http.StatusOK, responseTypes.TokenResponse{
+		Token: token,
+	})
+}
+
+func SuccessResponseWithData(c *gin.Context, message string, data any, count int) {
 	c.JSON(http.StatusOK, responseTypes.SuccessResponseData{
-		Base: responseTypes.Base{Status: 1, Message: message},
+		Meta: responseTypes.Meta{Base: responseTypes.Base{Status: 1, Message: message}, Count: count},
 		Data: data,
 	})
 }

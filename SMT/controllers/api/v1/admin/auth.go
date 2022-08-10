@@ -4,7 +4,6 @@ import (
 	"SMT/config"
 	"SMT/models"
 	requestTypes "SMT/types/requests"
-	responseTypes "SMT/types/responses"
 	stringTypes "SMT/types/strings"
 	"SMT/utility"
 
@@ -34,17 +33,18 @@ func Auth(c *gin.Context) {
 		"id":       admin.Id,
 		"admin_id": admin.AdminId,
 		"email":    admin.EmailId,
+		"role":     "admin",
 	})
 	if err != nil {
 		utility.ErrorResponse(c, stringTypes.LOGIN_FAILED)
 		return
 	}
 
-	utility.SuccessResponseWithData(c, stringTypes.SUCCESS_LOGIN, responseTypes.TokenResponse{Token: token})
+	utility.SuccessResponseWithToken(c, token)
 }
 
 func ChangePassword(c *gin.Context) {
-	var requestBody requestTypes.AdminChangePassword
+	var requestBody requestTypes.ChangePassword
 	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		utility.ErrorResponse(c, utility.GetErrorMessage(err))

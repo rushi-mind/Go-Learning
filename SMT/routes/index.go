@@ -6,4 +6,5 @@ var Router = gin.New()
 
 func InitRoutes() {
 	InitAdminRoutes(Router)
+	InitStudentRoutes(Router)
 }

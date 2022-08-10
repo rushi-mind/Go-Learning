@@ -16,3 +16,7 @@ var _DateValidation validator.Func = func(fl validator.FieldLevel) bool {
 	_, err := time.Parse(stringTypes.DATE_FORMAT, fl.Field().String())
 	return err == nil
 }
+
+func IsValidSemester(semester string) bool {
+	return semester >= "1" && semester <= "8"
+}

@@ -94,7 +94,7 @@ func GetAssignments(c *gin.Context) {
 	}
 	assignments := repository.GetAssignments(departmentID, semester)
 	if len(assignments) > 0 {
-		utility.SuccessResponseWithData(c, stringTypes.ASSIGNMENTS_FETCHED, assignments)
+		utility.SuccessResponseWithData(c, stringTypes.ASSIGNMENTS_FETCHED, assignments, len(assignments))
 		return
 	}
 	utility.ErrorResponse(c, stringTypes.ASSIGNMENTS_NOT_FOUND)
