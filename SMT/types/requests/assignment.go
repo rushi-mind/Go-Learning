@@ -1,6 +1,6 @@
 package requestTypes
 
-type AddAssignment struct {
+type AddUpdateAssignment struct {
 	Name         string `json:"name" binding:"required"`
 	Semester     string `json:"semester" binding:"required,semesterValidation"`
 	DepartmentID uint   `json:"department_id" binding:"required,numeric"`

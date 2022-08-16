@@ -1,4 +1,4 @@
-package adminV1Controller
+package attendanceV1Controller
 
 import (
 	"SMT/repository"

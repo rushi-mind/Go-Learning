@@ -49,4 +49,8 @@ const (
 	INVALID_ROLL_NO          = "Roll No is invalid"
 	PASSWORD_CHANGE_FAILURE  = "Failed to change password. Please try again."
 	PROFILE_FETCHED          = "Profile fetched successfully"
+	DEPARTMENTS_FETCHED      = "Departments fetched successfully"
+	DEPARTMENT_FETCHED       = "Department fetched successfully"
+	ASSIGNMENT_UPDATE_FAIL   = "Failed to update assignment"
+	ASSIGNMENT_UPDATED       = "Assignment updated successfully"
 )

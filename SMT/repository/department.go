@@ -4,6 +4,7 @@ import (
 	"SMT/config"
 	"SMT/models"
 	requestTypes "SMT/types/requests"
+	responseTypes "SMT/types/responses"
 	"SMT/utility"
 	"fmt"
 	"strconv"
@@ -34,4 +35,16 @@ func UpdateDepartment(department requestTypes.UpdateDepartment, id int) error {
 	query += " WHERE id = " + strconv.Itoa(id)
 	fmt.Println("query: ", query)
 	return config.DB.Exec(query).Error
+}
+
+func GetDepartments() []responseTypes.GetDepartment {
+	var departments []responseTypes.GetDepartment
+	config.DB.Raw("SELECT id, name, code FROM departments").Scan(&departments)
+	return departments
+}
+
+func GetDepartment(id int) responseTypes.GetDepartment {
+	var department responseTypes.GetDepartment
+	config.DB.Raw("SELECT id, name, code FROM departments WHERE id = ??", id).Scan(&department)
+	return department
 }

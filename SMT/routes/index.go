@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 var Router = gin.New()
 
 func InitRoutes() {
-	InitAdminRoutes(Router)
+	InitAdminTeacherRoutes(Router)
 	InitStudentRoutes(Router)
+	InitOtherRoutes(Router)
 }

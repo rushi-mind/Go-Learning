@@ -1,4 +1,4 @@
-package adminV1Controller
+package assignmentV1Controller
 
 import (
 	"SMT/repository"
@@ -22,7 +22,7 @@ func AddAssignment(c *gin.Context) {
 		fmt.Println("file.Size", file.Size)
 	}
 
-	var requestBody requestTypes.AddAssignment
+	var requestBody requestTypes.AddUpdateAssignment
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		log.Default().Println(err)
 		utility.ErrorResponse(c, err.Error())
@@ -66,7 +66,7 @@ func AddAssignment(c *gin.Context) {
 func DeleteAssignment(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
+		utility.ErrorResponse(c, stringTypes.INVALID_ASSIGNMENT_ID)
 		return
 	}
 	if !repository.DeleteAssignment(id) {
@@ -74,6 +74,28 @@ func DeleteAssignment(c *gin.Context) {
 		return
 	}
 	utility.SuccessResponseWithoutData(c, stringTypes.ASSIGNMENT_DELETED)
+}
+
+func UpdateAssignment(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		utility.ErrorResponse(c, stringTypes.INVALID_ASSIGNMENT_ID)
+		return
+	}
+	if !repository.IsValidAssignmentID(id) {
+		utility.ErrorResponse(c, stringTypes.INVALID_ASSIGNMENT_ID)
+		return
+	}
+	var requestBody requestTypes.AddUpdateAssignment
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		utility.ErrorResponse(c, utility.GetErrorMessage(err))
+		return
+	}
+	if err := repository.UpdateAssignment(id, requestBody); err != nil {
+		utility.ErrorResponse(c, stringTypes.ASSIGNMENT_UPDATE_FAIL)
+		return
+	}
+	utility.SuccessResponseWithoutData(c, stringTypes.ASSIGNMENT_UPDATED)
 }
 
 func GetAssignments(c *gin.Context) {

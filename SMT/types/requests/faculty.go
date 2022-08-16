@@ -11,3 +11,8 @@ type UpdateTeacher struct {
 	LastName     string `json:"last_name" binding:"alpha"`
 	DepartmentId uint   `json:"department_id" binding:"numeric"`
 }
+
+type AuthTeacher struct {
+	EmployeeID string `json:"employee_id" binding:"numeric"`
+	Password   string `json:"password"`
+}

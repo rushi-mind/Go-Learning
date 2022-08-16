@@ -41,3 +41,37 @@ func AuthMiddlewareStudent(c *gin.Context) {
 	c.Set("user", payload)
 	c.Next()
 }
+
+func AuthMiddlewareTeacher(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token == "" || len(token) == 0 {
+		c.String(401, "token not found")
+		c.Abort()
+		return
+	}
+	payload, err := utility.GetPayloadFromToken(strings.Split(token, " ")[1])
+	if (err != nil) || (payload["role"] == "student") {
+		utility.ErrorResponse(c, stringTypes.AUTHORIZATION_FAILED)
+		c.Abort()
+		return
+	}
+	c.Set("user", payload)
+	c.Next()
+}
+
+func AuthAnyMiddleware(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token == "" || len(token) == 0 {
+		c.String(401, "token not found")
+		c.Abort()
+		return
+	}
+	payload, err := utility.GetPayloadFromToken(strings.Split(token, " ")[1])
+	if err != nil {
+		utility.ErrorResponse(c, stringTypes.AUTHORIZATION_FAILED)
+		c.Abort()
+		return
+	}
+	c.Set("user", payload)
+	c.Next()
+}

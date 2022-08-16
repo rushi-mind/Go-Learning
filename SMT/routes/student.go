@@ -1,6 +1,7 @@
 package routes
 
 import (
+	authV1Controllers "SMT/controllers/api/v1/auth"
 	studentV1Controllers "SMT/controllers/api/v1/student"
 	"SMT/middlewares"
 
@@ -16,5 +17,5 @@ func InitStudentRoutes(router *gin.Engine) {
 	studentRoutes.PUT("/change-password-student", studentV1Controllers.ChangePassword)
 
 	// Auth
-	router.POST("/student/auth", studentV1Controllers.AuthStudent)
+	router.POST("/student/auth", authV1Controllers.AuthStudent)
 }

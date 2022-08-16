@@ -1,4 +1,4 @@
-package adminV1Controller
+package teacherV1Controller
 
 import (
 	"SMT/config"

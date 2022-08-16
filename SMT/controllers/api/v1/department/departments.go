@@ -1,4 +1,4 @@
-package adminV1Controller
+package departmentV1Controller
 
 import (
 	"SMT/config"
@@ -65,4 +65,23 @@ func DeleteDepartment(c *gin.Context) {
 	}
 	config.DB.Delete(&department)
 	utility.SuccessResponseWithoutData(c, stringTypes.DEPARTMENT_DELETED)
+}
+
+func GetDepartments(c *gin.Context) {
+	departments := repository.GetDepartments()
+	utility.SuccessResponseWithData(c, stringTypes.DEPARTMENTS_FETCHED, departments, len(departments))
+}
+
+func GetDepartment(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("deptId"))
+	if err != nil {
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
+		return
+	}
+	department := repository.GetDepartment(id)
+	if department.ID == 0 {
+		utility.ErrorResponse(c, stringTypes.INVALID_DEPARTMENT_ID)
+		return
+	}
+	utility.SuccessResponseWithData(c, stringTypes.DEPARTMENT_FETCHED, department, 1)
 }
